@@ -1,0 +1,48 @@
+@font-face {
+    font-family: "DotGothic16";
+    src: url("fonts/DotGothic16/DotGothic16-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "PottaOne";
+    src: url("fonts/Potta_One/PottaOne-Regular.ttf") format("truetype");
+}
+
+.dotgothic16 {
+  font-family: "DotGothic16", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.pottaOne {
+    font-family: "PottaOne";
+    font-weight: 800;
+    font-style: normal;
+}
+
+* {
+    background-color: #ffffff;
+    font-family:'Courier New', Courier, monospace;
+}
+
+
+#cloud {
+    width:500px;
+    height:auto;
+}
+
+.tab {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+}
+
+.tab:hover {
+    padding: 15px;
+    font-size: 20px;
+    color: coral;
+}
+
+.citation {
+    font-size: 3px;
+}
