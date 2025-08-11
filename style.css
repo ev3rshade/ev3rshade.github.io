@@ -8,6 +8,11 @@
     src: url("fonts/Potta_One/PottaOne-Regular.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "Montserrat";
+    src: url("fonts/Montserrat/Montserrat-VariableFont_wght.ttf") format("truetype")
+}
+
 .dotgothic16 {
   font-family: "DotGothic16", sans-serif;
   font-weight: 800;
@@ -20,11 +25,52 @@
     font-style: normal;
 }
 
+
+/* website styling */
+
 * {
-    background-color: #ffffff;
-    font-family:'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    font-family: 'Montserrat','Courier New', Courier, monospace;
+    font-weight: 500;
+    /* border: 1px solid red; */
 }
 
+body {
+
+    background-color: rgb(248, 242, 222);
+    position: relative;
+}
+
+.paper-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100%;
+  background-image: url("paper_texture_2.jpg");
+  background-size: auto;
+  background-repeat: repeat;
+  background-position: top left;
+  opacity: 20%;
+  pointer-events: none; 
+  z-index: 1;
+}
+
+
+p, h1, h2, h3, h4, h5, h6, .text {
+  position: relative;
+  z-index: 2;
+}
+
+
+.sky {
+    width: 100px; 
+    height: 500px; 
+    object-fit: cover; 
+}
 
 #cloud {
     width:500px;
@@ -32,15 +78,18 @@
 }
 
 .tab {
+    flex: 1;
     display: block;
     padding: 15px;
+    text-align: center;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .tab:hover {
     padding: 15px;
     font-size: 20px;
-    color: coral;
+    color: rgb(80, 176, 255);
 }
 
 .citation {
