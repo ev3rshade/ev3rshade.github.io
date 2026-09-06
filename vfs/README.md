@@ -9,7 +9,7 @@
 
 ようこそ
 
-[prev](https://justhapi.github.io/Portfolio/) < web-ring > [next]()
+[prev](https://kathleenli.tech/) < web-ring > [next]()
 
 type "help" to see available commands
 type "ls" to see what's here

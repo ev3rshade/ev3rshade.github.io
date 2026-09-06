@@ -5,22 +5,22 @@
 
 /* Default colors — overridden at runtime by parseTermrc() from vfs/termrc */
 :root {
-    --bg:     #efe9d7;
-    --fg:     #116f40;
-    --dim:    #82c3af;
-    --faint:  #a0cc99;
-    --border: #d7ffcc;
-    --err:    #cc3300;
-    --file:   #13a454;
+    --bg:     #f4f8ff;
+    --fg:     #0a66ff;
+    --dim:    #ff8c42;
+    --faint:  #6f93c2;
+    --border: #b3d7ff;
+    --err:    #ff3b30;
+    --file:   #0d47d9;
 }
 body.dark {
-    --bg:     #092132;
-    --fg:     #00ffaa;
-    --dim:    #3d9e72;
-    --faint:  #2a5f60;
-    --border: #1a3f50;
-    --err:    #ff5555;
-    --file:   #99bba8;
+    --bg:     #071022;
+    --fg:     #3fc8ff;
+    --dim:    #ff9d42;
+    --faint:  #5a7ba3;
+    --border: #2bb8f0;
+    --err:    #ff4d6d;
+    --file:   #9fd6ff;
 }
 
 * {
