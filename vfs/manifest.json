@@ -1,0 +1,70 @@
+{
+    "/about-me/README.md": {
+        "type": "file",
+        "src": "vfs/about-me/README.md"
+    },
+    "/about-me/skills.md": {
+        "type": "file",
+        "src": "vfs/about-me/skills.md"
+    },
+    "/about-me": {
+        "type": "dir",
+        "children": [
+            "README.md",
+            "skills.md"
+        ]
+    },
+    "/blog/journal": {
+        "type": "dir",
+        "children": []
+    },
+    "/blog/posts": {
+        "type": "dir",
+        "children": []
+    },
+    "/blog/README.md": {
+        "type": "file",
+        "src": "vfs/blog/README.md"
+    },
+    "/blog": {
+        "type": "dir",
+        "children": [
+            "journal",
+            "posts",
+            "README.md"
+        ]
+    },
+    "/projects/extra.txt": {
+        "type": "file",
+        "src": "vfs/projects/extra.txt"
+    },
+    "/projects/README.md": {
+        "type": "file",
+        "src": "vfs/projects/README.md"
+    },
+    "/projects": {
+        "type": "dir",
+        "children": [
+            "extra.txt",
+            "README.md"
+        ]
+    },
+    "/README.md": {
+        "type": "file",
+        "src": "vfs/README.md"
+    },
+    "/.termrc": {
+        "type": "file",
+        "src": "vfs/termrc"
+    },
+    "/": {
+        "type": "dir",
+        "children": [
+            "about-me",
+            "blog",
+            "projects",
+            "README.md",
+            ".termrc"
+        ]
+    }
+}

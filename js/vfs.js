@@ -1,16 +1,6 @@
 // virtual filesystem representing the website
-const FS = {
-    '/':                  { type: 'dir',  children: ['README.md', '.termrc', 'about-me', 'projects', 'blog'] },
-    '/README.md':         { type: 'file', src: 'vfs/README.md' },
-    '/.termrc':           { type: 'file', src: 'vfs/termrc' },
-    '/about-me':          { type: 'dir',  children: ['README.md'] },
-    '/about-me/README.md':{ type: 'file', src: 'vfs/about-me/README.md' },
-    '/projects':          { type: 'dir',  children: ['README.md'] },
-    '/projects/README.md':{ type: 'file', src: 'vfs/projects/README.md' },
-    '/blog':              { type: 'dir',  children: ['README.md', 'posts'] },
-    '/blog/README.md':    { type: 'file', src: 'vfs/blog/README.md' },
-    '/blog/posts':        { type: 'dir',  children: [] },
-};
+// populated at runtime from vfs/manifest.json + vfs/blog/posts.json — see initFS() in terminal.js
+const FS = {};
 
 function resolvePath(p) {
     if (!p || p === '~') return '/';
@@ -26,11 +16,23 @@ function resolvePath(p) {
 
 function node(path) { return FS[path] || null; }
 
+// Files that can be edited + saved from vim; edits persist in localStorage
+// since this is a static site with no backend to write to.
+const EDITABLE_FILES = ['/.termrc'];
+
+function overrideKey(src) { return `override:${src}`; }
+
 async function fetchFile(src) {
-    if (src === 'vfs/termrc') {
-        const override = localStorage.getItem('termrc');
-        if (override !== null) return override;
+    let override = localStorage.getItem(overrideKey(src));
+    if (override === null && src === 'vfs/termrc') {
+        // migrate from the old termrc-only override key
+        override = localStorage.getItem('termrc');
+        if (override !== null) {
+            localStorage.setItem(overrideKey(src), override);
+            localStorage.removeItem('termrc');
+        }
     }
+    if (override !== null) return override;
     try {
         const r = await fetch(src);
         return r.ok ? await r.text() : null;

@@ -1,5 +1,4 @@
-
-
-this is my blog. a good starting read is my hobbies list
+my blog. a good first read is my hobbies list
 
 posts are under posts/
+dated thought dumps under journal/

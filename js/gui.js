@@ -1,14 +1,17 @@
+if (window.marked) marked.setOptions({ breaks: true });
+
 async function guiGo(section, slug = null) {
     const page = document.getElementById('gui-page');
     if (!page) return;
     if (section === 'blog' && !slug) {
-        const posts = await (await fetch('vfs/blog/posts.json')).json();
-        page.innerHTML = posts
+        const blog = await (await fetch('vfs/blog/blog.json')).json();
+        const list = (name, posts) => `<h2>${name}</h2>` + posts
             .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .map(p => `<a class="gui-post" href="#" onclick="guiGo('blog','${p.slug}');return false">
+            .map(p => `<a class="gui-post" href="#" onclick="guiGo('blog','${name}/${p.slug}');return false">
                 <b>${p.title}</b><span>${p.date}</span><small>${p.description}</small></a>`).join('');
+        page.innerHTML = list('posts', blog.posts) + list('journal', blog.journal);
     } else if (section === 'blog' && slug) {
-        const text = await fetchFile(`vfs/blog/posts/${slug}.md`);
+        const text = await fetchFile(`vfs/blog/${slug}.md`);
         page.innerHTML = `<button class="gui-back" onclick="guiGo('blog')">← back</button>`
             + (window.marked ? marked.parse(text || '') : `<pre>${text}</pre>`);
     } else {
@@ -16,6 +19,14 @@ async function guiGo(section, slug = null) {
         const text = await fetchFile(srcMap[section] || 'vfs/README.md');
         page.innerHTML = window.marked ? marked.parse(text || '') : `<pre>${text}</pre>`;
     }
+}
+
+// Maps the terminal's current directory to the matching GUI section.
+function guiGoFromCwd() {
+    if (cwd.startsWith('/about-me')) guiGo('about-me');
+    else if (cwd.startsWith('/projects')) guiGo('projects');
+    else if (cwd.startsWith('/blog')) guiGo('blog');
+    else guiGo('home');
 }
 
 // ── GUI window drag ───────────────────────────────────────────────────────────

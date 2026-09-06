@@ -1,36 +1,17 @@
 main
-- running
-- coding
-- reading
-- digital archive (Obsidian)
-- linux
+coding | karate | reading | digital archive (Obsidian) | linux
 
 what i'm currently trying
-- stenography (gregg shorthand)
-- public speaking
-- break dancing
+rust | sewing
 
 secondary
-- gym
-- skateboarding
-- drawing (traditional/digital)
-- singing
-- drinking coffee
+running | gym | skateboarding | drawing | singing | coffee shops
 
 every so often
-- writing/journaling 
-- sewing
-- postcard set design
-- climbing
-- cooking
+writing/journaling | postcard set design | climbing | cooking
 
 rarely
-- record/cd shopping
-- LEGOS
-- swing dancing
-- guitar
+record/cd shopping | LEGOS | swing dancing | guitar
 
 past
-- karate
-- piano
-- making playlists
+piano | making playlists | break dancing

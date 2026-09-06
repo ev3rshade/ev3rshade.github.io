@@ -152,7 +152,21 @@ function clear() {
     plantTimers.length = 0;
     terminal.querySelectorAll('.plant-overlay').forEach(el => el.remove());
 }
-function guiPlease() { guiWindow.classList.remove('hidden'); guiGo('home'); }
+function guiPlease() { guiWindow.classList.remove('hidden'); guiGoFromCwd(); }
+
+// ── reset ─────────────────────────────────────────────────────────────────────
+
+function resetFile([path] = []) {
+    if (!path) return print('usage: reset <file>', 'err');
+    const p = resolvePath(path);
+    const n = node(p);
+    if (!n || n.type !== 'file') return print(`reset: ${path}: No such file`, 'err');
+    if (!EDITABLE_FILES.includes(p)) return print(`reset: ${path}: not an editable file`, 'err');
+    const key = overrideKey(n.src);
+    if (localStorage.getItem(key) === null) return print(`reset: ${path}: no local changes to reset`, 'err');
+    localStorage.removeItem(key);
+    print(`reset: ${path}: restored to default`);
+}
 
 function theme([mode] = []) {
     const dark = mode === 'dark' || (mode === undefined && !document.body.classList.contains('dark'));
@@ -169,7 +183,8 @@ function help() {
         '  grep <pattern> <file>   search for pattern in file',
         '  wc <file>               word, line, and char count',
         '  find [path] [-name <pattern>] [-type f|d]',
-        '  vim <file>              open file read-only  (:q to quit)',
+        '  vim <file>              open file  (editable for .termrc: i/a to edit, :w to save, :q to quit)',
+        '  reset <file>            discard local edits to a file, restoring its default',
         '  plant                   grow ascii moss',
         '  clear                   clear terminal + plants',
         '  theme <light|dark>      toggle color theme',

@@ -23,10 +23,16 @@ async function parseTermrc() {
 
 async function initFS() {
     try {
-        const posts = await (await fetch('vfs/blog/posts.json')).json();
-        FS['/blog/posts'].children = posts.map(p => p.slug + '.md');
-        for (const p of posts)
-            FS[`/blog/posts/${p.slug}.md`] = { type: 'file', src: `vfs/blog/posts/${p.slug}.md` };
+        const manifest = await (await fetch('vfs/manifest.json')).json();
+        Object.assign(FS, manifest);
+    } catch {}
+    try {
+        const blog = await (await fetch('vfs/blog/blog.json')).json();
+        for (const section of ['posts', 'journal']) {
+            FS[`/blog/${section}`].children = blog[section].map(p => p.slug + '.md');
+            for (const p of blog[section])
+                FS[`/blog/${section}/${p.slug}.md`] = { type: 'file', src: `vfs/blog/${section}/${p.slug}.md` };
+        }
     } catch {}
 }
 
@@ -75,7 +81,7 @@ function print(text, cls) {
 
 // ── Command dispatch ──────────────────────────────────────────────────────────
 
-const COMMANDS = { ls, cd, cat, grep, wc, find, vim: openVimCmd, plant, clear, theme, help, 'gui-please': guiPlease };
+const COMMANDS = { ls, cd, cat, grep, wc, find, vim: openVimCmd, reset: resetFile, plant, clear, theme, help, 'gui-please': guiPlease };
 
 
 // ── Keyboard handlers ─────────────────────────────────────────────────────────
@@ -147,6 +153,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         vimHandleKey(e);
     });
 
-    // Clicking anywhere refocuses the input
-    document.addEventListener('click', () => { if (!vim.active) cmdInput.focus(); });
+    // Clicking anywhere refocuses the input, but not if the click was
+    // finishing a text selection (otherwise refocusing yanks the view
+    // back to the input and breaks highlighting).
+    document.addEventListener('click', () => {
+        if (vim.active) return;
+        const sel = window.getSelection();
+        if (sel && sel.toString().length > 0) return;
+        cmdInput.focus();
+    });
 });

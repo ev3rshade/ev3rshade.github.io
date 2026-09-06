@@ -25,15 +25,18 @@ ev3rshade.com/
 │
 ├── vfs/                        # content served as the virtual filesystem
 │   ├── README.md               # home page (shown on load and on `cd ~`)
-│   ├── termrc                  # startup config (PROMPT, THEME)
+│   ├── termrc                  # startup config (PROMPT, THEME), exposed as /.termrc
+│   ├── manifest.json           # generated — structural tree of vfs/, fetched at runtime
 │   ├── about-me/README.md
 │   ├── projects/README.md
 │   └── blog/
 │       ├── README.md
-│       ├── posts.json          # post index (slug, title, date, description)
-│       └── posts/*.md          # individual blog posts
+│       ├── blog.json           # generated — { posts: [...], journal: [...] }, each entry
+│       │                       # { slug, title, date, description }
+│       ├── posts/*.md          # named essays
+│       └── journal/*.md        # dated thought dumps
 │
-├── sync-posts.js               # node script — regenerates vfs/blog/posts.json from posts/
+├── sync-filesystem.js          # node script — regenerates vfs/manifest.json + vfs/blog/blog.json
 ├── wrangler.jsonc              # Cloudflare Workers / Pages config
 └── README.md
 ```
@@ -51,15 +54,15 @@ The site is a fake shell running entirely in the browser. There is no server-sid
 { type: 'file', src: 'vfs/about-me/README.md' }   // real fetch path
 ```
 
+`FS` starts empty and is built up at runtime (see `initFS()` below) rather than hand-listed in `vfs.js` — new files under `vfs/` show up automatically after a `sync-filesystem.js` run, with no code changes.
+
 `resolvePath(p)` resolves `.` / `..` / relative paths against `cwd`.  
 `fetchFile(src)` fetches the file over HTTP. `vfs/termrc` is also checked in `localStorage` first (allows per-user overrides).
-
-Blog post entries are dynamic — on init, `posts.json` is fetched and the `/blog/posts` directory is populated at runtime.
 
 ### startup sequence
 
 1. `DOMContentLoaded` fires in [js/terminal.js](js/terminal.js)
-2. `initFS()` fetches `posts.json` and populates `/blog/posts`
+2. `initFS()` fetches `vfs/manifest.json` (the auto-discovered directory tree) into `FS`, then fetches `blog.json` and populates `/blog/posts` and `/blog/journal` — these two stay separate from the manifest since they carry title/date/description metadata the GUI blog list needs
 3. `parseTermrc()` fetches `vfs/termrc`, applies `PROMPT` and `THEME`
 4. `vfs/README.md` is fetched and printed as the welcome screen
 
@@ -91,11 +94,17 @@ Blog post entries are dynamic — on init, `posts.json` is fetched and the `/blo
 
 Colors are CSS custom properties (`--bg`, `--fg`, `--dim`, etc.) defined in [css/style.css](css/style.css) and toggled via `body.dark`. The default theme is read from `vfs/termrc` (`export THEME="dark"`). The user's preference is persisted in `localStorage`.
 
-### adding blog posts
+### adding content
 
-1. Write a markdown file in `vfs/blog/posts/`
-2. Run `node sync-posts.js` to regenerate `vfs/blog/posts.json`
-3. The post will appear in `ls /blog/posts`, `cat`, vim, and the GUI blog list
+Run `node sync-filesystem.js` after adding/removing/renaming any file under `vfs/` — it regenerates `vfs/manifest.json` (and `vfs/blog/blog.json`) from what's actually on disk. Both are committed, since the static site fetches them over HTTP at runtime rather than reading the filesystem live.
+
+**Blog posts / journal entries:**
+
+1. Write a markdown file in `vfs/blog/posts/` (named essays) or `vfs/blog/journal/` (dated thought dumps)
+2. Run `node sync-filesystem.js` — new files are added to the matching `blog.json` section with a default `title`/`date`/`description` (edit those in by hand afterward); files removed from disk are dropped from `blog.json` automatically
+3. The entry will appear in `ls /blog/posts` or `ls /blog/journal`, `cat`, vim, and the GUI blog list
+
+**Everything else** (`about-me/`, `projects/`, new top-level pages): just add/edit the file under `vfs/` and run `node sync-filesystem.js` — no `vfs.js` edits needed.
 
 
 ## Sections that Have been Vibe Coded
